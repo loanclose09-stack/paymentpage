@@ -1,141 +1,152 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Payment Page</title>
-
-<style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f5f6fa;
-}
-
-.container {
-  max-width: 420px;
-  margin: auto;
-  padding: 20px;
-}
-
-.card {
-  background: #fff;
-  padding: 15px;
-  border-radius: 12px;
-  margin-bottom: 15px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
-
-.amount {
-  font-size: 28px;
-  font-weight: bold;
-  color: #1a1a1a;
-}
-
-.copy-btn {
-  float: right;
-  background: #4A90E2;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.section-title {
-  font-size: 18px;
-  margin: 15px 0 10px;
-  color: #555;
-}
-
-.payment-option {
-  display: flex;
-  align-items: center;
-  padding: 12px 10px;
-  border-bottom: 1px solid #eee;
-  cursor: pointer;
-}
-
-.payment-option img {
-  width: 35px;
-  margin-right: 12px;
-}
-
-.pay-btn {
-  width: 100%;
-  background: linear-gradient(90deg, #4A90E2, #357ABD);
-  color: white;
-  padding: 14px;
-  border: none;
-  border-radius: 8px;
-  font-size: 18px;
-  margin: 15px 0;
-  cursor: pointer;
-}
-
-input {
-  width: 100%;
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  font-size: 16px;
-}
-
-.submit-btn {
-  width: 100%;
-  background: #4A90E2;
-  color: white;
-  padding: 14px;
-  border: none;
-  border-radius: 8px;
-  font-size: 18px;
-  margin-top: 10px;
-  cursor: pointer;
-}
-</style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Confirmation</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <div class="container">
 
-  <div class="card"
-    <div class="amount">₹4000
-      <button class="copy-btn">Copy</button>
+  <!-- Step 1 -->
+  <div class="card">
+    <div class="card-header">
+      Step 1: Copy Amount and Bank Account Information
+    </div>
+
+    <div class="row">
+      <span>Amount</span>
+      <div>
+        <b class="highlight">₹40000</b>
+        <button onclick="copyText('4000')">Copy</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <span>Name</span>
+      <div>
+        <b class="highlight">Md Saleem</b>
+        <button onclick="copyText('Md Saleem')">Copy</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <span>VPA/UPI</span>
+      <div>
+        <b class="highlight">murshad.recovery@ptyes</b>
+        <button onclick="copyText('murshad.recovery@ptyes')">Copy</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <span>Expiry Time</span>
+      <b class="highlight">2026-02-23 19:19:26</b>
     </div>
   </div>
 
+  <!-- Step 2 -->
   <div class="card">
-    mrsaleem02@ybl
-    <button class="copy-btn">Copy</button>
+    <div class="card-header">
+      Step 2: Transfer and don't modify this amount
+    </div>
+    <p class="warning">⚠ Please record your Reference No. after payment</p>
   </div>
 
-  <div class="section-title">Select payment method</div>
-
+  <!-- Step 3 -->
   <div class="card">
-    <div class="payment-option">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/7/71/PhonePe_Logo.svg">
-      PhonePe
+    <div class="card-header">
+      Step 3: Enter UTR to Complete Payment
     </div>
-    <div class="payment-option">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Google_Pay_Logo.svg">
-      Google Pay
-    </div>
-    <div class="payment-option">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/Paytm_logo.png">
-      Paytm
-    </div>
-  </div>
 
-  <button class="pay-btn">Pay ₹4000</button>
-
-  <div class="section-title">Input UTR to finish payment</div>
-
-  <div class="card">
-    <input type="text" placeholder="UTR (UPI Ref.ID) must be 12 digits">
+    <input type="text" placeholder="Enter 12 digit UTR" maxlength="12">
     <button class="submit-btn">Submit UTR</button>
   </div>
 
 </div>
 
+<script>
+function copyText(text) {
+  navigator.clipboard.writeText(text);
+  alert("Copied: " + text);
+}
+</script>
+
 </body>
 </html>
+body {
+  font-family: Arial, sans-serif;
+  background: #f2f2f2;
+  margin: 0;
+  padding: 10px;
+}
+
+.container {
+  max-width: 500px;
+  margin: auto;
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.card-header {
+  background: #3498db;
+  color: white;
+  padding: 15px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.highlight {
+  color: #f39c12;
+}
+
+button {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #2980b9;
+}
+
+.warning {
+  padding: 15px;
+  color: #e67e22;
+}
+
+input {
+  width: 90%;
+  margin: 15px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.submit-btn {
+  width: 90%;
+  margin: 0 15px 15px;
+  padding: 12px;
+  font-size: 16px;
+}
