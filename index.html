@@ -1,32 +1,141 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Payment Submit</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment Page</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f6fa;
+}
+
+.container {
+  max-width: 420px;
+  margin: auto;
+  padding: 20px;
+}
+
+.card {
+  background: #fff;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.amount {
+  font-size: 28px;
+  font-weight: bold;
+  color: #1a1a1a;
+}
+
+.copy-btn {
+  float: right;
+  background: #4A90E2;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.section-title {
+  font-size: 18px;
+  margin: 15px 0 10px;
+  color: #555;
+}
+
+.payment-option {
+  display: flex;
+  align-items: center;
+  padding: 12px 10px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.payment-option img {
+  width: 35px;
+  margin-right: 12px;
+}
+
+.pay-btn {
+  width: 100%;
+  background: linear-gradient(90deg, #4A90E2, #357ABD);
+  color: white;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  margin: 15px 0;
+  cursor: pointer;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+}
+
+.submit-btn {
+  width: 100%;
+  background: #4A90E2;
+  color: white;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+</style>
 </head>
+
 <body>
 
-<h2>Payment Confirmation Form</h2>
+<div class="container">
 
-<form>
-  <label>Name:</label><br>
-  <input type="text" placeholder="Enter your name"><br><br>
+  <div class="card">
+    <div class="amount">₹
+      <button class="copy-btn">Copy</button>
+    </div>
+  </div>
 
-  <label>Amount:</label><br>
-  <input type="number" placeholder="Enter amount"><br><br>
+  <div class="card">
+    solutionsenterprise441-4@okicici
+    <button class="copy-btn">Copy</button>
+  </div>
 
-  <label>Payment Method:</label><br>
-  <select>
-    <option>Google Pay</option>
-    <option>PhonePe</option>
-    <option>Paytm</option>
-    <option>UPI</option>
-  </select><br><br>
+  <div class="section-title">Select payment method</div>
 
-  <label>UTR Number:</label><br>
-  <input type="text" placeholder="Enter 12 digit UTR"><br><br>
+  <div class="card">
+    <div class="payment-option">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/7/71/PhonePe_Logo.svg">
+      PhonePe
+    </div>
+    <div class="payment-option">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Google_Pay_Logo.svg">
+      Google Pay
+    </div>
+    <div class="payment-option">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/Paytm_logo.png">
+      Paytm
+    </div>
+  </div>
 
-  <button type="submit">Submit</button>
-</form>
+  <button classic="pay-btn">Pay </button>
+
+  <div class="section-title">Input UTR to finish payment</div>
+
+  <div class="card">
+    <input type="text" placeholder="UTR (UPI Ref.ID) must be 12 digits">
+    <button class="submit-btn">Submit UTR</button>
+  </div>
+
+</div>
 
 </body>
 </html>
