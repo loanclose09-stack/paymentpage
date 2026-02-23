@@ -1,74 +1,231 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Payment Confirmation</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment Page</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Roboto',sans-serif;
+}
+
+body{
+    background:#f2f2f2;
+}
+
+.container{
+    width:95%;
+    margin:15px auto;
+}
+
+/* Card */
+.card{
+    border:2px dashed #c7c7c7;
+    background:#ffffff;
+    margin-bottom:25px;
+    animation:fadeIn 0.5s ease-in-out;
+}
+
+/* Header */
+.card-header{
+    background:#3aa1cf;
+    color:#ffffff;
+    padding:18px;
+    font-size:19px;
+    font-weight:500;
+}
+
+/* Rows */
+.row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:16px 18px;
+    border-top:1px solid #e5e5e5;
+}
+
+.label{
+    font-size:18px;
+    font-weight:500;
+    color:#4a4a4a;
+}
+
+.value{
+    font-size:18px;
+    font-weight:500;
+    color:#e49a2f;
+}
+
+/* Copy Button */
+.copy-btn{
+    background:#4a90e2;
+    border:none;
+    color:#fff;
+    padding:6px 14px;
+    border-radius:4px;
+    font-size:14px;
+    margin-left:8px;
+    cursor:pointer;
+    transition:all 0.2s ease;
+}
+
+.copy-btn:hover{
+    background:#357bd8;
+}
+
+.copy-btn:active{
+    transform:scale(0.95);
+}
+
+/* Warning */
+.warning{
+    padding:18px;
+    font-size:16px;
+    color:#555;
+}
+
+.warning span{
+    color:#ff6a00;
+    margin-right:6px;
+}
+
+/* Input */
+.input-box{
+    padding:18px;
+}
+
+input{
+    width:100%;
+    padding:13px;
+    font-size:16px;
+    border:1px solid #dcdcdc;
+    border-radius:5px;
+    outline:none;
+}
+
+input:focus{
+    border-color:#4a90e2;
+}
+
+/* Submit Button */
+.submit-btn{
+    width:95%;
+    margin:20px auto;
+    display:block;
+    background:#4a6fa5;
+    color:#ffffff;
+    border:none;
+    padding:16px;
+    font-size:20px;
+    font-weight:500;
+    border-radius:6px;
+    cursor:pointer;
+    transition:all 0.2s ease;
+}
+
+.submit-btn:hover{
+    background:#3f5f8e;
+}
+
+.submit-btn:active{
+    transform:scale(0.98);
+}
+
+/* Animation */
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(10px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+</style>
 </head>
+
 <body>
 
 <div class="container">
 
-  <!-- Step 1 -->
-  <div class="card">
-    <div class="card-header">
-      Step 1: Copy Amount and Bank Account Information
+    <div class="card">
+        <div class="card-header">
+            Step1: Copy Amount and Bank Account information
+        </div>
+
+        <div class="row">
+            <div class="label">Amount</div>
+            <div>
+                <span class="value" id="amount">₹4000</span>
+                <button class="copy-btn" onclick="copyText('amount')">copy</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="label">Name</div>
+            <div>
+                <span class="value" id="name">Md Saleem</span>
+                <button class="copy-btn" onclick="copyText('name')">copy</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="label">VPA/UPI</div>
+            <div>
+                <span class="value" id="upi">mrsaleem02@ybl</span>
+                <button class="copy-btn" onclick="copyText('upi')">copy</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="label">Expiry Time</div>
+            <div class="value">2026-02-25 19:19:26</div>
+        </div>
     </div>
 
-    <div class="row">
-      <span>Amount</span>
-      <div>
-        <b class="highlight">₹40000</b>
-        <button onclick="copyText('4000')">Copy</button>
-      </div>
+    <div class="card">
+        <div class="card-header">
+            Step2:Transfer and don't modify this amount to us.
+        </div>
+
+        <div class="warning">
+            <span>⚠</span>
+            Please record your reference No. {Ref No.} after payment
+        </div>
     </div>
 
-    <div class="row">
-      <span>Name</span>
-      <div>
-        <b class="highlight">Md Saleem</b>
-        <button onclick="copyText('Md Saleem')">Copy</button>
-      </div>
-    </div>
+    <div class="card">
+        <div class="card-header">
+            Step3:Please enter Ref No. to complete the recharge
+        </div>
 
-    <div class="row">
-      <span>VPA/UPI</span>
-      <div>
-        <b class="highlight">murshad.recovery@ptyes</b>
-        <button onclick="copyText('murshad.recovery@ptyes')">Copy</button>
-      </div>
-    </div>
+        <div class="warning">
+            <span>⚠</span>
+            Be sure to return this page to fill the UTR numbers after you have completed you payment
+        </div>
 
-    <div class="row">
-      <span>Expiry Time</span>
-      <b class="highlight">2026-02-23 19:19:26</b>
+        <div class="input-box">
+            <input type="text" placeholder="UTR (UPI Ref.ID) must be 12 digits">
+        </div>
     </div>
-  </div>
-
-  <!-- Step 2 -->
-  <div class="card">
-    <div class="card-header">
-      Step 2: Transfer and don't modify this amount
-    </div>
-    <p class="warning">⚠ Please record your Reference No. after payment</p>
-  </div>
-
-  <!-- Step 3 -->
-  <div class="card">
-    <div class="card-header">
-      Step 3: Enter UTR to Complete Payment
-    </div>
-
-    <input type="text" placeholder="Enter 12 digit UTR" maxlength="12">
-    <button class="submit-btn">Submit UTR</button>
-  </div>
 
 </div>
 
+<button class="submit-btn">Submit UTR</button>
+
 <script>
-function copyText(text) {
-  navigator.clipboard.writeText(text);
-  alert("Copied: " + text);
+function copyText(id){
+    const text=document.getElementById(id).innerText;
+    navigator.clipboard.writeText(text).then(()=>{
+        alert("Copied: " + text);
+    });
 }
 </script>
 
