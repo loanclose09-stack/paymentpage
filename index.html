@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Payment Page</title>
+</head>
+<body>
+
+<h2>Bn</h2>
+
+<p>
+After you paid, you must come back here to submit the Ref/UTR No. (12 digits). 
+Then your money is credited to your account.
+</p>
+
+<form onsubmit="showMessage(); return false;">
+  <label>Enter UTR / Ref No:</label><br><br>
+
+  <input type="text" id="utr" placeholder="Enter 12 digit UTR" maxlength="12"><br><br>
+
+  <button type="submit">Submit</button>
+</form>
+
+<p id="msg"></p>
+
+<script>
+function showMessage() {
+  var utr = document.getElementById("utr").value;
+
+  if(utr.length == 12){
+    document.getElementById("msg").innerHTML = "UTR Submitted Successfully ✅";
+  } else {
+    document.getElementById("msg").innerHTML = "Please enter 12 digit UTR number ❌";
+  }
+}
+</script>
+
+</body>
+</html>
