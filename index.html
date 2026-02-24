@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>timepay gateway</title>
+<title>Payment Page</title>
 
 <style>
 body{
@@ -74,8 +74,6 @@ input{
 .generated-link{
   font-size:12px;
 }
-
-/* Toast Style */
 #toast{
   position: fixed;
   bottom: 30px;
@@ -93,6 +91,13 @@ input{
 #toast.show{
   opacity: 1;
 }
+.qr-box{
+  text-align:center;
+  margin-top:15px;
+}
+.qr-box img{
+  width:200px;
+}
 </style>
 </head>
 <body>
@@ -101,7 +106,7 @@ input{
 
 <!-- EDIT PANEL -->
 <div class="card edit-box" id="editPanel">
-  <h3>Payment Page</h3>
+  <h3>Payment Details</h3>
   <input type="text" id="nameInput" placeholder="Receiver Name" value="Your Business Name">
   <input type="number" id="amountInput" placeholder="Amount" value="1000">
   <input type="text" id="upiInput" placeholder="UPI ID" value="yourupi@bank">
@@ -132,6 +137,12 @@ input{
   </div>
 
   <button class="pay-btn" onclick="payNow()">Pay via UPI</button>
+
+  <!-- QR CODE -->
+  <div class="qr-box">
+    <img id="qrImage" src="" alt="QR Code">
+  </div>
+
 </div>
 
 <!-- UTR SECTION -->
@@ -143,29 +154,27 @@ input{
 
 </div>
 
-<!-- Toast -->
 <div id="toast">Copied</div>
 
 <script>
 
-// Load parameters & hide edit panel if shared link
 window.onload = function(){
   const params = new URLSearchParams(window.location.search);
-
   let name = params.get("name");
   let amount = params.get("amount");
   let upi = params.get("upi");
 
   if(name && amount && upi){
     document.getElementById("editPanel").style.display = "none";
-
     document.getElementById("nameDisplay").innerText = name;
     document.getElementById("amountDisplay").innerText = "₹" + amount;
     document.getElementById("upiDisplay").innerText = upi;
+    generateQR(upi, amount, name);
+  } else {
+    generateQR("yourupi@bank","1000","Your Business Name");
   }
 };
 
-// Generate share link
 function generateLink(){
   let name = document.getElementById("nameInput").value;
   let amount = document.getElementById("amountInput").value;
@@ -177,42 +186,42 @@ function generateLink(){
 
   let baseUrl = window.location.origin + window.location.pathname;
   let newUrl = `${baseUrl}?name=${encodeURIComponent(name)}&amount=${amount}&upi=${encodeURIComponent(upi)}`;
-
   document.getElementById("generatedLink").value = newUrl;
+
+  generateQR(upi, amount, name);
 }
 
-// Copy with smooth toast (NO alert)
+function generateQR(upi, amount, name){
+  let upiLink = `upi://pay?pa=${upi}&pn=${name}&am=${amount}&cu=INR`;
+  let qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiLink)}`;
+  document.getElementById("qrImage").src = qrUrl;
+}
+
 function copyText(id){
   let text = document.getElementById(id).innerText;
   navigator.clipboard.writeText(text);
   showToast("Copied");
 }
 
-// Toast function
 function showToast(message){
   let toast = document.getElementById("toast");
   toast.innerText = message;
   toast.classList.add("show");
-
   setTimeout(() => {
     toast.classList.remove("show");
   }, 2000);
 }
 
-// Open UPI
 function payNow(){
   let amount = document.getElementById("amountDisplay").innerText.replace("₹","");
   let upi = document.getElementById("upiDisplay").innerText;
   let name = document.getElementById("nameDisplay").innerText;
-
   let url = `upi://pay?pa=${upi}&pn=${name}&am=${amount}&cu=INR`;
   window.location.href = url;
 }
 
-// UTR validation
 function submitUTR(){
   let utr = document.getElementById("utrInput").value.trim();
-
   if(/^\d{12}$/.test(utr)){
     showToast("UTR Submitted Successfully");
   }else{
@@ -224,4 +233,3 @@ function submitUTR(){
 
 </body>
 </html>
-
