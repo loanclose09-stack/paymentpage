@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Secure Payment</title>
+<title>Payment Page</title>
 
 <style>
 body{
@@ -81,8 +81,8 @@ input{
 <div class="container">
 
 <!-- EDIT PANEL -->
-<div class="card edit-box">
-  <h3>Payment Details</h3>
+<div class="card edit-box" id="editPanel">
+  <h3>Payment Page</h3>
   <input type="text" id="nameInput" placeholder="Receiver Name" value="Your Business Name">
   <input type="number" id="amountInput" placeholder="Amount" value="1000">
   <input type="text" id="upiInput" placeholder="UPI ID" value="yourupi@bank">
@@ -126,7 +126,6 @@ input{
 
 <script>
 
-// Load values from URL when page opens
 window.onload = function(){
   const params = new URLSearchParams(window.location.search);
 
@@ -134,23 +133,18 @@ window.onload = function(){
   let amount = params.get("amount");
   let upi = params.get("upi");
 
-  if(name){
+  // If link has parameters → hide edit panel
+  if(name && amount && upi){
+    document.getElementById("editPanel").style.display = "none";
+
     document.getElementById("nameDisplay").innerText = name;
-    document.getElementById("nameInput").value = name;
-  }
-
-  if(amount){
     document.getElementById("amountDisplay").innerText = "₹" + amount;
-    document.getElementById("amountInput").value = amount;
-  }
-
-  if(upi){
     document.getElementById("upiDisplay").innerText = upi;
-    document.getElementById("upiInput").value = upi;
+
   }
 };
 
-// Generate dynamic shareable link
+// Generate dynamic link
 function generateLink(){
   let name = document.getElementById("nameInput").value;
   let amount = document.getElementById("amountInput").value;
@@ -166,18 +160,18 @@ function generateLink(){
   document.getElementById("generatedLink").value = newUrl;
 }
 
-// Copy text function
+// Copy
 function copyText(id){
   let text = document.getElementById(id).innerText;
   navigator.clipboard.writeText(text);
   alert("Copied: " + text);
 }
 
-// Open UPI app
+// UPI open
 function payNow(){
-  let amount = document.getElementById("amountInput").value;
-  let upi = document.getElementById("upiInput").value;
-  let name = document.getElementById("nameInput").value;
+  let amount = document.getElementById("amountDisplay").innerText.replace("₹","");
+  let upi = document.getElementById("upiDisplay").innerText;
+  let name = document.getElementById("nameDisplay").innerText;
 
   let url = `upi://pay?pa=${upi}&pn=${name}&am=${amount}&cu=INR`;
   window.location.href = url;
@@ -198,4 +192,3 @@ function submitUTR(){
 
 </body>
 </html>
-
