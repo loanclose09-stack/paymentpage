@@ -1,232 +1,159 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Payment Page</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<title>Secure Payment</title>
 
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Roboto',sans-serif;
-}
-
 body{
-    background:#f2f2f2;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f2f4f8;
+  padding: 20px;
 }
-
 .container{
-    width:95%;
-    margin:15px auto;
+  max-width: 500px;
+  margin: auto;
 }
-
-/* Card */
 .card{
-    border:2px dashed #c7c7c7;
-    background:#ffffff;
-    margin-bottom:25px;
-    animation:fadeIn 0.5s ease-in-out;
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+  margin-bottom: 20px;
 }
-
-/* Header */
-.card-header{
-    background:#3aa1cf;
-    color:#ffffff;
-    padding:18px;
-    font-size:19px;
-    font-weight:500;
+.header{
+  background: linear-gradient(45deg,#2196F3,#1565C0);
+  color: white;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 15px;
 }
-
-/* Rows */
 .row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:16px 18px;
-    border-top:1px solid #e5e5e5;
+  display:flex;
+  justify-content: space-between;
+  margin: 10px 0;
+  align-items:center;
 }
-
-.label{
-    font-size:18px;
-    font-weight:500;
-    color:#4a4a4a;
-}
-
-.value{
-    font-size:18px;
-    font-weight:500;
-    color:#e49a2f;
-}
-
-/* Copy Button */
 .copy-btn{
-    background:#4a90e2;
-    border:none;
-    color:#fff;
-    padding:6px 14px;
-    border-radius:4px;
-    font-size:14px;
-    margin-left:8px;
-    cursor:pointer;
-    transition:all 0.2s ease;
+  background:#2196F3;
+  color:white;
+  border:none;
+  padding:6px 10px;
+  border-radius:6px;
+  cursor:pointer;
 }
-
-.copy-btn:hover{
-    background:#357bd8;
+.pay-btn{
+  width:100%;
+  background:#4CAF50;
+  color:white;
+  padding:12px;
+  border:none;
+  border-radius:8px;
+  margin-top:10px;
+  font-size:16px;
+  cursor:pointer;
 }
-
-.copy-btn:active{
-    transform:scale(0.95);
-}
-
-/* Warning */
-.warning{
-    padding:18px;
-    font-size:16px;
-    color:#555;
-}
-
-.warning span{
-    color:#ff6a00;
-    margin-right:6px;
-}
-
-/* Input */
-.input-box{
-    padding:18px;
-}
-
 input{
-    width:100%;
-    padding:13px;
-    font-size:16px;
-    border:1px solid #dcdcdc;
-    border-radius:5px;
-    outline:none;
+  width:100%;
+  padding:10px;
+  margin:8px 0;
+  border-radius:6px;
+  border:1px solid #ddd;
 }
-
-input:focus{
-    border-color:#4a90e2;
-}
-
-/* Submit Button */
-.submit-btn{
-    width:95%;
-    margin:20px auto;
-    display:block;
-    background:#4a6fa5;
-    color:#ffffff;
-    border:none;
-    padding:16px;
-    font-size:20px;
-    font-weight:500;
-    border-radius:6px;
-    cursor:pointer;
-    transition:all 0.2s ease;
-}
-
-.submit-btn:hover{
-    background:#3f5f8e;
-}
-
-.submit-btn:active{
-    transform:scale(0.98);
-}
-
-/* Animation */
-@keyframes fadeIn{
-    from{
-        opacity:0;
-        transform:translateY(10px);
-    }
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
+.edit-box{
+  background:#fafafa;
+  padding:15px;
+  border-radius:10px;
+  margin-bottom:20px;
 }
 </style>
 </head>
-
 <body>
 
 <div class="container">
 
-    <div class="card">
-        <div class="card-header">
-            Step1: Copy Amount and Bank Account information
-        </div>
+<!-- EDIT PANEL -->
+<div class="card edit-box">
+  <h3>Edit Payment Details</h3>
+  <input type="text" id="nameInput" placeholder="Receiver Name" value="Your Business Name">
+  <input type="number" id="amountInput" placeholder="Amount" value="1000">
+  <input type="text" id="upiInput" placeholder="UPI ID" value="yourupi@bank">
+  <button class="pay-btn" onclick="updateDetails()">Update Details</button>
+</div>
 
-        <div class="row">
-            <div class="label">Amount</div>
-            <div>
-                <span class="value" id="amount">₹4000</span>
-                <button class="copy-btn" onclick="copyText('amount')">copy</button>
-            </div>
-        </div>
+<!-- PAYMENT CARD -->
+<div class="card">
+  <div class="header">Step 1: Complete Payment</div>
 
-        <div class="row">
-            <div class="label">Name</div>
-            <div>
-                <span class="value" id="name">Md Saleem</span>
-                <button class="copy-btn" onclick="copyText('name')">copy</button>
-            </div>
-        </div>
+  <div class="row">
+    <strong>Amount:</strong>
+    <span id="amountDisplay">₹1000</span>
+    <button class="copy-btn" onclick="copyText('amountDisplay')">Copy</button>
+  </div>
 
-        <div class="row">
-            <div class="label">VPA/UPI</div>
-            <div>
-                <span class="value" id="upi">mrsaleem02@ybl</span>
-                <button class="copy-btn" onclick="copyText('upi')">copy</button>
-            </div>
-        </div>
+  <div class="row">
+    <strong>Name:</strong>
+    <span id="nameDisplay">Your Business Name</span>
+  </div>
 
-        <div class="row">
-            <div class="label">Expiry Time</div>
-            <div class="value">2026-02-25 19:19:26</div>
-        </div>
-    </div>
+  <div class="row">
+    <strong>UPI ID:</strong>
+    <span id="upiDisplay">yourupi@bank</span>
+    <button class="copy-btn" onclick="copyText('upiDisplay')">Copy</button>
+  </div>
 
-    <div class="card">
-        <div class="card-header">
-            Step2:Transfer and don't modify this amount to us.
-        </div>
+  <button class="pay-btn" onclick="payNow()">Pay via UPI</button>
+</div>
 
-        <div class="warning">
-            <span>⚠</span>
-            Please record your reference No. {Ref No.} after payment
-        </div>
-    </div>
-
-    <div class="card">
-        <div class="card-header">
-            Step3:Please enter Ref No. to complete the recharge
-        </div>
-
-        <div class="warning">
-            <span>⚠</span>
-            Be sure to return this page to fill the UTR numbers after you have completed you payment
-        </div>
-
-        <div class="input-box">
-            <input type="text" placeholder="UTR (UPI Ref.ID) must be 12 digits">
-        </div>
-    </div>
+<!-- UTR SECTION -->
+<div class="card">
+  <div class="header">Step 2: Submit UTR</div>
+  <input type="text" id="utrInput" placeholder="Enter 12 Digit UTR">
+  <button class="pay-btn" onclick="submitUTR()">Submit UTR</button>
+</div>
 
 </div>
 
-<button class="submit-btn">Submit UTR</button>
-
 <script>
-function copyText(id){
-    const text=document.getElementById(id).innerText;
-    navigator.clipboard.writeText(text).then(()=>{
-        alert("Copied: " + text);
-    });
+
+function updateDetails(){
+  let name = document.getElementById("nameInput").value;
+  let amount = document.getElementById("amountInput").value;
+  let upi = document.getElementById("upiInput").value;
+
+  document.getElementById("nameDisplay").innerText = name;
+  document.getElementById("amountDisplay").innerText = "₹" + amount;
+  document.getElementById("upiDisplay").innerText = upi;
+
+  alert("Details Updated Successfully");
 }
+
+function copyText(id){
+  let text = document.getElementById(id).innerText;
+  navigator.clipboard.writeText(text);
+  alert("Copied: " + text);
+}
+
+function payNow(){
+  let amount = document.getElementById("amountInput").value;
+  let upi = document.getElementById("upiInput").value;
+  let name = document.getElementById("nameInput").value;
+
+  let url = `upi://pay?pa=${upi}&pn=${name}&am=${amount}&cu=INR`;
+  window.location.href = url;
+}
+
+function submitUTR(){
+  let utr = document.getElementById("utrInput").value;
+  if(utr.length == 12){
+    alert("UTR Submitted Successfully!");
+  }else{
+    alert("UTR must be 12 digits");
+  }
+}
+
 </script>
 
 </body>
