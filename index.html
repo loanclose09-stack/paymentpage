@@ -55,79 +55,48 @@ body{
   font-size:16px;
   cursor:pointer;
 }
-input{
-  width:100%;
-  padding:10px;
-  margin:8px 0;
-  border-radius:6px;
-  border:1px solid #ddd;
-}
-.edit-box{
-  background:#fafafa;
-  padding:15px;
-  border-radius:10px;
-  margin-bottom:20px;
-}
 </style>
 </head>
 <body>
 
 <div class="container">
 
-<!-- EDIT PANEL -->
-<div class="card edit-box">
-  <h3>Edit Payment Details</h3>
-  <input type="text" id="nameInput" placeholder="Receiver Name" value="Your Business Name">
-  <input type="number" id="amountInput" placeholder="Amount" value="1000">
-  <input type="text" id="upiInput" placeholder="UPI ID" value="yourupi@bank">
-  <button class="pay-btn" onclick="updateDetails()">Update Details</button>
-</div>
-
-<!-- PAYMENT CARD -->
 <div class="card">
   <div class="header">Step 1: Complete Payment</div>
 
   <div class="row">
     <strong>Amount:</strong>
-    <span id="amountDisplay">₹1000</span>
+    <span id="amountDisplay"></span>
     <button class="copy-btn" onclick="copyText('amountDisplay')">Copy</button>
   </div>
 
   <div class="row">
     <strong>Name:</strong>
-    <span id="nameDisplay">Your Business Name</span>
+    <span id="nameDisplay"></span>
   </div>
 
   <div class="row">
     <strong>UPI ID:</strong>
-    <span id="upiDisplay">yourupi@bank</span>
+    <span id="upiDisplay"></span>
     <button class="copy-btn" onclick="copyText('upiDisplay')">Copy</button>
   </div>
 
   <button class="pay-btn" onclick="payNow()">Pay via UPI</button>
 </div>
 
-<!-- UTR SECTION -->
-<div class="card">
-  <div class="header">Step 2: Submit UTR</div>
-  <input type="text" id="utrInput" placeholder="Enter 12 Digit UTR">
-  <button class="pay-btn" onclick="submitUTR()">Submit UTR</button>
-</div>
-
 </div>
 
 <script>
 
-function updateDetails(){
-  let name = document.getElementById("nameInput").value;
-  let amount = document.getElementById("amountInput").value;
-  let upi = document.getElementById("upiInput").value;
+function getParams(){
+  const urlParams = new URLSearchParams(window.location.search);
+  const name = urlParams.get('name') || "Your Business";
+  const amount = urlParams.get('amount') || "1000";
+  const upi = urlParams.get('upi') || "yourupi@bank";
 
   document.getElementById("nameDisplay").innerText = name;
   document.getElementById("amountDisplay").innerText = "₹" + amount;
   document.getElementById("upiDisplay").innerText = upi;
-
-  alert("Details Updated Successfully");
 }
 
 function copyText(id){
@@ -137,22 +106,16 @@ function copyText(id){
 }
 
 function payNow(){
-  let amount = document.getElementById("amountInput").value;
-  let upi = document.getElementById("upiInput").value;
-  let name = document.getElementById("nameInput").value;
+  const urlParams = new URLSearchParams(window.location.search);
+  const name = urlParams.get('name');
+  const amount = urlParams.get('amount');
+  const upi = urlParams.get('upi');
 
   let url = `upi://pay?pa=${upi}&pn=${name}&am=${amount}&cu=INR`;
   window.location.href = url;
 }
 
-function submitUTR(){
-  let utr = document.getElementById("utrInput").value;
-  if(utr.length == 12){
-    alert("UTR Submitted Successfully!");
-  }else{
-    alert("UTR must be 12 digits");
-  }
-}
+getParams();
 
 </script>
 
