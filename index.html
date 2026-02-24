@@ -2,58 +2,49 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Secure Payment</title>
+<title>Demo Payment Link Generator</title>
 
 <style>
 body{
-  font-family: 'Segoe UI', sans-serif;
-  background: #f2f4f8;
-  padding: 20px;
+  font-family: Arial;
+  background:#f2f4f8;
+  padding:20px;
 }
 .container{
-  max-width: 500px;
-  margin: auto;
+  max-width:500px;
+  margin:auto;
 }
 .card{
-  background: #fff;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-  margin-bottom: 20px;
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 5px 20px rgba(0,0,0,0.08);
+  margin-bottom:20px;
 }
-.header{
-  background: linear-gradient(45deg,#2196F3,#1565C0);
-  color: white;
-  padding: 15px;
-  border-radius: 10px;
-  text-align: center;
-  font-size: 18px;
-  margin-bottom: 15px;
-}
-.row{
-  display:flex;
-  justify-content: space-between;
-  margin: 10px 0;
-  align-items:center;
-}
-.copy-btn{
-  background:#2196F3;
-  color:white;
-  border:none;
-  padding:6px 10px;
-  border-radius:6px;
-  cursor:pointer;
-}
-.pay-btn{
+button{
   width:100%;
-  background:#4CAF50;
-  color:white;
   padding:12px;
   border:none;
   border-radius:8px;
-  margin-top:10px;
+  background:#4CAF50;
+  color:white;
   font-size:16px;
   cursor:pointer;
+  margin-top:10px;
+}
+input{
+  width:100%;
+  padding:10px;
+  margin:8px 0;
+  border-radius:6px;
+  border:1px solid #ddd;
+}
+.link-box{
+  background:#eee;
+  padding:10px;
+  word-break:break-all;
+  border-radius:6px;
+  margin-top:10px;
 }
 </style>
 </head>
@@ -61,61 +52,56 @@ body{
 
 <div class="container">
 
-<div class="card">
-  <div class="header">Step 1: Complete Payment</div>
+<div class="card" id="adminPanel">
+  <h3>Admin Panel (Demo)</h3>
+  <input type="text" id="name" placeholder="Receiver Name">
+  <input type="number" id="amount" placeholder="Amount">
+  <input type="text" id="upi" placeholder="UPI ID">
+  <button onclick="generateLink()">Generate Payment Link</button>
+  <div class="link-box" id="generatedLink"></div>
+</div>
 
-  <div class="row">
-    <strong>Amount:</strong>
-    <span id="amountDisplay"></span>
-    <button class="copy-btn" onclick="copyText('amountDisplay')">Copy</button>
-  </div>
-
-  <div class="row">
-    <strong>Name:</strong>
-    <span id="nameDisplay"></span>
-  </div>
-
-  <div class="row">
-    <strong>UPI ID:</strong>
-    <span id="upiDisplay"></span>
-    <button class="copy-btn" onclick="copyText('upiDisplay')">Copy</button>
-  </div>
-
-  <button class="pay-btn" onclick="payNow()">Pay via UPI</button>
+<div class="card" id="paymentPage" style="display:none;">
+  <h3>Complete Payment</h3>
+  <p><strong>Amount:</strong> ₹<span id="pAmount"></span></p>
+  <p><strong>Name:</strong> <span id="pName"></span></p>
+  <p><strong>UPI ID:</strong> <span id="pUpi"></span></p>
+  <button onclick="alert('Demo Mode - Payment Not Real')">Pay via UPI</button>
 </div>
 
 </div>
 
 <script>
 
-function getParams(){
-  const urlParams = new URLSearchParams(window.location.search);
-  const name = urlParams.get('name') || "Your Business";
-  const amount = urlParams.get('amount') || "1000";
-  const upi = urlParams.get('upi') || "yourupi@bank";
+function generateLink(){
+  const name = document.getElementById("name").value;
+  const amount = document.getElementById("amount").value;
+  const upi = document.getElementById("upi").value;
 
-  document.getElementById("nameDisplay").innerText = name;
-  document.getElementById("amountDisplay").innerText = "₹" + amount;
-  document.getElementById("upiDisplay").innerText = upi;
+  const data = btoa(JSON.stringify({name,amount,upi}));
+
+  const url = window.location.origin + "/?data=" + data;
+
+  document.getElementById("generatedLink").innerText = url;
 }
 
-function copyText(id){
-  let text = document.getElementById(id).innerText;
-  navigator.clipboard.writeText(text);
-  alert("Copied: " + text);
+function loadPayment(){
+  const params = new URLSearchParams(window.location.search);
+  const data = params.get("data");
+
+  if(data){
+    document.getElementById("adminPanel").style.display = "none";
+    document.getElementById("paymentPage").style.display = "block";
+
+    const decoded = JSON.parse(atob(data));
+
+    document.getElementById("pName").innerText = decoded.name;
+    document.getElementById("pAmount").innerText = decoded.amount;
+    document.getElementById("pUpi").innerText = decoded.upi;
+  }
 }
 
-function payNow(){
-  const urlParams = new URLSearchParams(window.location.search);
-  const name = urlParams.get('name');
-  const amount = urlParams.get('amount');
-  const upi = urlParams.get('upi');
-
-  let url = `upi://pay?pa=${upi}&pn=${name}&am=${amount}&cu=INR`;
-  window.location.href = url;
-}
-
-getParams();
+loadPayment();
 
 </script>
 
