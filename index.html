@@ -2,35 +2,60 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Demo Payment Link Generator</title>
+<title>Secure Payment</title>
 
 <style>
 body{
-  font-family: Arial;
-  background:#f2f4f8;
-  padding:20px;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f2f4f8;
+  padding: 20px;
 }
 .container{
-  max-width:500px;
-  margin:auto;
+  max-width: 500px;
+  margin: auto;
 }
 .card{
-  background:white;
-  padding:20px;
-  border-radius:12px;
-  box-shadow:0 5px 20px rgba(0,0,0,0.08);
-  margin-bottom:20px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+  margin-bottom: 20px;
 }
-button{
+.header{
+  background: linear-gradient(45deg,#2196F3,#1565C0);
+  color: white;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+.row{
+  display:flex;
+  justify-content: space-between;
+  margin: 10px 0;
+  align-items:center;
+  gap:10px;
+}
+.copy-btn{
+  background:#2196F3;
+  color:white;
+  border:none;
+  padding:6px 10px;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:12px;
+}
+.pay-btn{
   width:100%;
+  background:#4CAF50;
+  color:white;
   padding:12px;
   border:none;
   border-radius:8px;
-  background:#4CAF50;
-  color:white;
+  margin-top:10px;
   font-size:16px;
   cursor:pointer;
-  margin-top:10px;
 }
 input{
   width:100%;
@@ -38,13 +63,16 @@ input{
   margin:8px 0;
   border-radius:6px;
   border:1px solid #ddd;
+  box-sizing:border-box;
 }
-.link-box{
-  background:#eee;
-  padding:10px;
-  word-break:break-all;
-  border-radius:6px;
-  margin-top:10px;
+.edit-box{
+  background:#fafafa;
+  padding:15px;
+  border-radius:10px;
+  margin-bottom:20px;
+}
+.generated-link{
+  font-size:12px;
 }
 </style>
 </head>
@@ -52,56 +80,119 @@ input{
 
 <div class="container">
 
-<div class="card" id="adminPanel">
-  <h3>Admin Panel (Demo)</h3>
-  <input type="text" id="name" placeholder="Receiver Name">
-  <input type="number" id="amount" placeholder="Amount">
-  <input type="text" id="upi" placeholder="UPI ID">
-  <button onclick="generateLink()">Generate Payment Link</button>
-  <div class="link-box" id="generatedLink"></div>
+<!-- EDIT PANEL -->
+<div class="card edit-box">
+  <h3>Edit Payment Details</h3>
+  <input type="text" id="nameInput" placeholder="Receiver Name" value="Your Business Name">
+  <input type="number" id="amountInput" placeholder="Amount" value="1000">
+  <input type="text" id="upiInput" placeholder="UPI ID" value="yourupi@bank">
+
+  <button class="pay-btn" onclick="generateLink()">Generate Shareable Link</button>
+  <input type="text" id="generatedLink" class="generated-link" readonly placeholder="Generated link will appear here">
 </div>
 
-<div class="card" id="paymentPage" style="display:none;">
-  <h3>Complete Payment</h3>
-  <p><strong>Amount:</strong> ₹<span id="pAmount"></span></p>
-  <p><strong>Name:</strong> <span id="pName"></span></p>
-  <p><strong>UPI ID:</strong> <span id="pUpi"></span></p>
-  <button onclick="alert('Demo Mode - Payment Not Real')">Pay via UPI</button>
+<!-- PAYMENT CARD -->
+<div class="card">
+  <div class="header">Step 1: Complete Payment</div>
+
+  <div class="row">
+    <strong>Amount:</strong>
+    <span id="amountDisplay">₹1000</span>
+    <button class="copy-btn" onclick="copyText('amountDisplay')">Copy</button>
+  </div>
+
+  <div class="row">
+    <strong>Name:</strong>
+    <span id="nameDisplay">Your Business Name</span>
+  </div>
+
+  <div class="row">
+    <strong>UPI ID:</strong>
+    <span id="upiDisplay">yourupi@bank</span>
+    <button class="copy-btn" onclick="copyText('upiDisplay')">Copy</button>
+  </div>
+
+  <button class="pay-btn" onclick="payNow()">Pay via UPI</button>
+</div>
+
+<!-- UTR SECTION -->
+<div class="card">
+  <div class="header">Step 2: Submit UTR</div>
+  <input type="text" id="utrInput" placeholder="Enter 12 Digit UTR">
+  <button class="pay-btn" onclick="submitUTR()">Submit UTR</button>
 </div>
 
 </div>
 
 <script>
 
+// Load values from URL when page opens
+window.onload = function(){
+  const params = new URLSearchParams(window.location.search);
+
+  let name = params.get("name");
+  let amount = params.get("amount");
+  let upi = params.get("upi");
+
+  if(name){
+    document.getElementById("nameDisplay").innerText = name;
+    document.getElementById("nameInput").value = name;
+  }
+
+  if(amount){
+    document.getElementById("amountDisplay").innerText = "₹" + amount;
+    document.getElementById("amountInput").value = amount;
+  }
+
+  if(upi){
+    document.getElementById("upiDisplay").innerText = upi;
+    document.getElementById("upiInput").value = upi;
+  }
+};
+
+// Generate dynamic shareable link
 function generateLink(){
-  const name = document.getElementById("name").value;
-  const amount = document.getElementById("amount").value;
-  const upi = document.getElementById("upi").value;
+  let name = document.getElementById("nameInput").value;
+  let amount = document.getElementById("amountInput").value;
+  let upi = document.getElementById("upiInput").value;
 
-  const data = btoa(JSON.stringify({name,amount,upi}));
+  document.getElementById("nameDisplay").innerText = name;
+  document.getElementById("amountDisplay").innerText = "₹" + amount;
+  document.getElementById("upiDisplay").innerText = upi;
 
-  const url = window.location.origin + "/?data=" + data;
+  let baseUrl = window.location.origin + window.location.pathname;
+  let newUrl = `${baseUrl}?name=${encodeURIComponent(name)}&amount=${amount}&upi=${encodeURIComponent(upi)}`;
 
-  document.getElementById("generatedLink").innerText = url;
+  document.getElementById("generatedLink").value = newUrl;
 }
 
-function loadPayment(){
-  const params = new URLSearchParams(window.location.search);
-  const data = params.get("data");
+// Copy text function
+function copyText(id){
+  let text = document.getElementById(id).innerText;
+  navigator.clipboard.writeText(text);
+  alert("Copied: " + text);
+}
 
-  if(data){
-    document.getElementById("adminPanel").style.display = "none";
-    document.getElementById("paymentPage").style.display = "block";
+// Open UPI app
+function payNow(){
+  let amount = document.getElementById("amountInput").value;
+  let upi = document.getElementById("upiInput").value;
+  let name = document.getElementById("nameInput").value;
 
-    const decoded = JSON.parse(atob(data));
+  let url = `upi://pay?pa=${upi}&pn=${name}&am=${amount}&cu=INR`;
+  window.location.href = url;
+}
 
-    document.getElementById("pName").innerText = decoded.name;
-    document.getElementById("pAmount").innerText = decoded.amount;
-    document.getElementById("pUpi").innerText = decoded.upi;
+// UTR validation
+function submitUTR(){
+  let utr = document.getElementById("utrInput").value.trim();
+
+  if(/^\d{12}$/.test(utr)){
+    alert("UTR Submitted Successfully!");
+  }else{
+    alert("UTR must be exactly 12 digits");
   }
 }
-
-loadPayment();
 
 </script>
 
