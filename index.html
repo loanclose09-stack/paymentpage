@@ -74,6 +74,25 @@ input{
 .generated-link{
   font-size:12px;
 }
+
+/* Toast Style */
+#toast{
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 25px;
+  font-size: 14px;
+  opacity: 0;
+  transition: 0.3s ease;
+  z-index: 9999;
+}
+#toast.show{
+  opacity: 1;
+}
 </style>
 </head>
 <body>
@@ -124,8 +143,12 @@ input{
 
 </div>
 
+<!-- Toast -->
+<div id="toast">Copied</div>
+
 <script>
 
+// Load parameters & hide edit panel if shared link
 window.onload = function(){
   const params = new URLSearchParams(window.location.search);
 
@@ -133,18 +156,16 @@ window.onload = function(){
   let amount = params.get("amount");
   let upi = params.get("upi");
 
-  // If link has parameters → hide edit panel
   if(name && amount && upi){
     document.getElementById("editPanel").style.display = "none";
 
     document.getElementById("nameDisplay").innerText = name;
     document.getElementById("amountDisplay").innerText = "₹" + amount;
     document.getElementById("upiDisplay").innerText = upi;
-
   }
 };
 
-// Generate dynamic link
+// Generate share link
 function generateLink(){
   let name = document.getElementById("nameInput").value;
   let amount = document.getElementById("amountInput").value;
@@ -160,14 +181,25 @@ function generateLink(){
   document.getElementById("generatedLink").value = newUrl;
 }
 
-// Copy
+// Copy with smooth toast (NO alert)
 function copyText(id){
   let text = document.getElementById(id).innerText;
   navigator.clipboard.writeText(text);
-  alert("Copied: " + text);
+  showToast("Copied");
 }
 
-// UPI open
+// Toast function
+function showToast(message){
+  let toast = document.getElementById("toast");
+  toast.innerText = message;
+  toast.classList.add("show");
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2000);
+}
+
+// Open UPI
 function payNow(){
   let amount = document.getElementById("amountDisplay").innerText.replace("₹","");
   let upi = document.getElementById("upiDisplay").innerText;
@@ -182,9 +214,9 @@ function submitUTR(){
   let utr = document.getElementById("utrInput").value.trim();
 
   if(/^\d{12}$/.test(utr)){
-    alert("UTR Submitted Successfully!");
+    showToast("UTR Submitted Successfully");
   }else{
-    alert("UTR must be exactly 12 digits");
+    showToast("UTR must be exactly 12 digits");
   }
 }
 
